@@ -43,26 +43,31 @@ temp = 100.0
 for i in range(100):
     temp = 100/(i+1)
     if(temp<10 and temp > 5):
-        #Evalúa si se acerca a aun resultado óptimo
+        #El tamaño del vecindario es de 10
         x1, x2 = vecindario(5, x1prim), vecindario(5, x2prim)
     elif(temp<=5 and temp > 2.5):
+        #Varia en 4 el tamaño del vecindario
         x1, x2 = vecindario(2, x1prim), vecindario(2, x2prim)
     elif(temp<=2.5 and temp > 1.5):
+        #El tamaño del vecindario sigue siendo de 4 pero solo se modifica uno de los dos valores
         if( i%2 == 0):
             x1 = vecindario(2, x1prim)
         else:
             x2 =  vecindario(2, x2prim)
     elif(temp <= 1.5):
+        #El tamaño de vecindario se reduce a 2 y se continua aplicando a un solo valor
         if( i%2 == 0):
             x1 = vecindario(1, x1prim)
         else:
             x2 =  vecindario(1, x2prim)
     elif(temp <= 1.3):
+        #El tamaño del vecindario se reduce a 1
         if( i%2 == 0):
             x1 = vecindario(.5, x1prim)
         else:
             x2 =  vecindario(.5, x2prim)
     else:
+        #Se generan aleatorios en el rango [-25, 25]
         x1, x2 = generateRand(), generateRand()
 
     output = subprocess.run(["my_func4.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
