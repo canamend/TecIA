@@ -15,7 +15,7 @@ def genPop():
     pob = [] 
     binArray = []
     n = nPop = 0
-    while(nPop < 1000):
+    while(nPop < 10):
         binArray = np.random.randint(0,2,63009)
         pob.append(binArray)
         nPop += 1
@@ -37,7 +37,7 @@ def fitness(solucion, lista):
         else:
             aux = False
         validSolucion = turnValid(solucion, aux, valid[1], lista, fitness)
-        return (validSolucion[1], validSolucion[0])
+        return (validSolucion[1], validSolucion[0]) #Retorna el valor de fitness pos[1] y el arreglo de 0s y 1s pos[0]
 
 def isValid(solucion, lista):
     i = 0
@@ -99,28 +99,69 @@ def turnValid(solucion, ban, numeros, lista, fitness):
         
 def genListaFit(population, lista):
     listaFit = []
+    arreglosBin = []
+    i = 0
     for padre in population:
-        listaFit.append( fitness(list(padre), lista)[0] )
-    return listaFit
+        elemento = fitness(list(padre), lista)
+        listaFit.append( elemento[1] )
+        arreglosBin.append( elemento[0] )
+        print(f"Se crea el elemento numero {i} del arreglo de fitness")
+        i += 1
+    return [listaFit, arreglosBin]
 
 def zeroCount(solucion):
     return solucion.count(0)
 
-def binTournament(listaFitness, numHijos, tamMaxPool):
+def genPadres(listaFitness, numHijos, tamMaxPool):
+    padres = []
     for i in range(numHijos):
-        print()
+        ban = ban1 = False
+        while(ban == False or ban1 == False):
+            if(ban == False):
+                n1 = random.randint(2, tamMaxPool)
+                if(n1 % 2 == 0):
+                    ban = True
+            if(ban1 == False):
+                n2 = random.randint(2, tamMaxPool)
+                if(n2 % 2 == 0):
+                    ban1 = True
 
+        pool1 = getElements(n1, listaFitness)
+        pool2 = getElements(n2, listaFitness)
+
+        winner = binTournament(pool1, pool2)
+        padres.append(winner)
+
+def getElements(poolSize, listaFitness):
+    pool = []
+    positions = []
+    i = 0
+    while(i < poolSize):
+        r = random.randint(0, len(listaFitness)-1)
+        pool.append(listaFitness[r])
+        positions.append(r)
+        i += 1
+    return [positions, pool]
+
+def binTournament(pool1, pool2):
+    # print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
+    print()
 
 n = nGen =0
 numHijos = 250
-tamMaxPool = 10
+tamMaxPool = 20
 lista = readArray("rail507.txt")
 population = genPop()
 lista.pop(0)
 
 while(nGen < 100):
     listaFitness = genListaFit(population, lista)
-    #idHijos = binTournament(listaFitness, numHijos, tamMaxPool)
+    listOnlyFitVal = listaFitness[0] #Aqui se evita enviar el arreglo de 1s y 0s
+    print(type(listOnlyFitVal))
+    print(listOnlyFitVal)
+    print("Se ha creado la lista de fitness")
+    idPadres = genPadres(listOnlyFitVal, numHijos, tamMaxPool)
+    nGen += 1
 print(len(lista))
 print(len(population))
 print(population[777])
