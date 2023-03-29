@@ -156,10 +156,7 @@ lista.pop(0)
 
 while(nGen < 100):
     listaFitness = genListaFit(population, lista)
-    listOnlyFitVal = listaFitness[0] #Aqui se evita enviar el arreglo de 1s y 0s
-    print(type(listOnlyFitVal))
-    print(listOnlyFitVal)
-    print("Se ha creado la lista de fitness")
+    listOnlyFitVal = listaFitness[1] #Aqui se evita enviar el arreglo de 1s y 0s
     idPadres = genPadres(listOnlyFitVal, numHijos, tamMaxPool)
     nGen += 1
 print(len(lista))
