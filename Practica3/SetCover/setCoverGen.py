@@ -146,17 +146,32 @@ def getElements(poolSize, listaFitness):
 
 def binTournament(pool1, pool2):
     print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
-    max1, max2 = min(pool1[1]), min(pool2[1])
-    print(f"El mejor de pool 1 es: {max1} y el mejor de pool 2 es: {max2}")
-    if(max1 > max2):
-        return max1
+    min1, min2 = min(pool1[1]), min(pool2[1])
+    print(f"El mejor de pool 1 es: {min1} y el mejor de pool 2 es: {min2}")
+    if(min1 > min2):
+        return min1
     else:
-        return max2
+        return min2
 
+def crossover(elemento1, elemento2, crossoverPoint):
+    child1 = child2 = []
+    tam = len(elemento1)
+    for i in range(tam):
+        if(i < crossoverPoint):
+            child1.append(elemento2[i])
+            child2.append(elemento1[i])
+        elif(i >= crossoverPoint and i < tam - crossoverPoint):
+            child1.append(elemento1[i])
+            child2.append(elemento2[i])
+        else:
+            child1.append(elemento2[i])
+            child2.append(elemento1[i])
+    return [child1, child2]
 
-n = nGen =0
-numHijos = 250
+n = nGen = 0
+numHijos = 4
 tamMaxPool = 6
+crossoverPoint = 21003
 lista = readArray("rail507.txt")
 population = genPop()
 lista.pop(0)
