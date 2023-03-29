@@ -131,6 +131,7 @@ def genPadres(listaFitness, numHijos, tamMaxPool):
 
         winner = binTournament(pool1, pool2)
         padres.append(winner)
+        print(f"Los padres son: {padres}")
 
 def getElements(poolSize, listaFitness):
     pool = []
@@ -144,12 +145,18 @@ def getElements(poolSize, listaFitness):
     return [positions, pool]
 
 def binTournament(pool1, pool2):
-    # print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
-    print()
+    print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
+    max1, max2 = min(pool1[1]), min(pool2[1])
+    print(f"El mejor de pool 1 es: {max1} y el mejor de pool 2 es: {max2}")
+    if(max1 > max2):
+        return max1
+    else:
+        return max2
+
 
 n = nGen =0
 numHijos = 250
-tamMaxPool = 20
+tamMaxPool = 6
 lista = readArray("rail507.txt")
 population = genPop()
 lista.pop(0)
