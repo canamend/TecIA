@@ -15,7 +15,7 @@ def genPop():
     pob = [] 
     binArray = []
     n = nPop = 0
-    while(nPop < 10):
+    while(nPop < 1000):
         binArray = np.random.randint(0,2,63009)
         pob.append(binArray)
         nPop += 1
@@ -56,7 +56,7 @@ def isValid(solucion, lista):
     else: 
         return (False, numeros)
     
-def turnValid(solucion, numeros, lista, fitness, ban = True):
+def turnValid(solucion, ban, numeros, lista, fitness):
     banAux = False
     if(ban == True):
         i = 0
@@ -71,11 +71,8 @@ def turnValid(solucion, numeros, lista, fitness, ban = True):
                             banAux = True
             i += 1
         if(len(numeros) >= 507):
-            # print("AHORA ES VÁLIDA")
-            # print(numeros)
             return (solucion, fitness)
         else:
-            print("Fue imposible hacerla válida")
             return (solucion, fitness)
     else:
         i = len(solucion) - 1
@@ -90,11 +87,8 @@ def turnValid(solucion, numeros, lista, fitness, ban = True):
                             banAux = True
             i -= 1
         if(len(numeros) >= 507):
-            # print("AHORA ES VÁLIDA")
-            # print(numeros)
             return (solucion, fitness)
         else:
-            print("Fue imposible hacerla válida")
             return (solucion, fitness)
         
 def genListaFit(population, lista):
@@ -105,7 +99,6 @@ def genListaFit(population, lista):
         elemento = fitness(list(padre), lista)
         listaFit.append( elemento[1] )
         arreglosBin.append( elemento[0] )
-        print(f"Se crea el elemento numero {i} del arreglo de fitness")
         i += 1
     return [listaFit, arreglosBin]
 
@@ -131,7 +124,6 @@ def genPadres(listaFitness, numHijos, tamMaxPool):
 
         winner = binTournament(pool1, pool2)
         padres.append(winner)
-        print(f"Los padres son: {padres}")
     return padres
 
 def getElements(poolSize, listaFitness):
@@ -146,17 +138,15 @@ def getElements(poolSize, listaFitness):
     return [positions, pool]
 
 def binTournament(pool1, pool2):
-    print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
     min1, min2 = min(pool1[1]), min(pool2[1])
     pos1, pos2 = pool1[0][pool1[1].index(min1)], pool2[0][pool2[1].index(min2)]
-    print(f"El mejor de pool 1 es: {min1} y el mejor de pool 2 es: {min2}")
     if(min1 < min2):
         return [pos1, min1]
     else:
         return [pos2, min2]
 
 def getHijos(idPadres, listaFitness, crossoverPoint):
-    hijos = fitnessHijos =[]
+    hijos =[]
     hijosTuple = []
     con = len(idPadres) - 1
     while(con > 0):
@@ -166,7 +156,6 @@ def getHijos(idPadres, listaFitness, crossoverPoint):
         for elemento in tupla:
             if(len(elemento)>63009):
                 elemento.pop()
-            print(f"Tamaño de elemento: {len(elemento)}")
             hijos.append(elemento)
     return genListaFit(hijos, lista)
 
@@ -175,7 +164,6 @@ def crossover(elemento1, elemento2, crossoverPoint):
     child1 = child2 = []
     i = 0
     tam = len(elemento1)
-    print(f"EL TAMAÑO ES {tam}")
     while(len(child1) < 63009 and len(child2) < 63009 ):
         if(i < crossoverPoint):
             child1.append(elemento2[i])
@@ -188,9 +176,6 @@ def crossover(elemento1, elemento2, crossoverPoint):
                 child1.append(elemento2[i])
                 child2.append(elemento1[i])
         i += 1
-    # child1.pop()
-    # child2.pop()
-    print(f"Los tamaños de los hijos son 1:{len(child1)} y 2: {len(child2)}")
     return [child1, child2]
 
 def mutacion(hijos):
@@ -207,9 +192,19 @@ def mutacion(hijos):
                         ban = True       
     return hijos
 
+def replacement(poblacion, hijos):
+    i = 0
+    while(i<len(hijos)):
+        index = poblacion[1].index( max(poblacion[1] ))
+        poblacion[0][index], poblacion[1][index] = hijos[0][i], hijos[1][i]
+        i+=1
+    print(f"El mejor valor de esta generación es: {min(poblacion[1])}")
+    return poblacion[0]
+
+
 n = nGen = 0
-numHijos = 4
-tamMaxPool = 6
+numHijos = 250
+tamMaxPool = 20
 crossoverPoint = 21003
 lista = readArray("rail507.txt")
 population = genPop()
@@ -221,11 +216,7 @@ while(nGen < 100):
     idPadres = genPadres(listOnlyFitVal, numHijos, tamMaxPool)
     idPadres = np.array(idPadres)
     listaFitnessHijos = getHijos(idPadres[:,0], listaFitness, crossoverPoint)
-    print(f"El tamaño de el primer hijo es de {len(listaFitnessHijos[0][0])} y el tercero es: {len(listaFitnessHijos[0][2])}")
-    print(f"Los fitness de los hijos son: {listaFitnessHijos[1]}")
-    listaFitnessHijos = genListaFit(mutacion(listaFitnessHijos[0]))
+    listaFitnessHijos = genListaFit(mutacion(listaFitnessHijos[0]), lista)
+    population = replacement(listaFitness, listaFitnessHijos)
     nGen += 1
-print(len(lista))
-print(len(population))
-print(population[777])
 
