@@ -132,6 +132,7 @@ def genPadres(listaFitness, numHijos, tamMaxPool):
         winner = binTournament(pool1, pool2)
         padres.append(winner)
         print(f"Los padres son: {padres}")
+    return padres
 
 def getElements(poolSize, listaFitness):
     pool = []
@@ -147,11 +148,27 @@ def getElements(poolSize, listaFitness):
 def binTournament(pool1, pool2):
     print(f"Los candidatos son:\nPrimer pool: {pool1}\nSegundo pool: {pool2}")
     min1, min2 = min(pool1[1]), min(pool2[1])
+    pos1, pos2 = pool1[0][pool1[1].index(min1)], pool2[0][pool2[1].index(min2)]
     print(f"El mejor de pool 1 es: {min1} y el mejor de pool 2 es: {min2}")
-    if(min1 > min2):
-        return min1
+    if(min1 < min2):
+        return [pos1, min1]
     else:
-        return min2
+        return [pos2, min2]
+
+def getHijos(idPadres, listaFitness, crossoverPoint):
+    hijos = fitnessHijos =[]
+    hijosTuple = ()
+    con = 0
+    while(con < len(idPadres)):
+        hijosTuple = crossover( listaFitness[0][ idPadres[con] ], listaFitness[0][ idPadres[con+1] ], crossoverPoint)
+        hijos.append( hijosTuple[0] )
+        hijos.append( hijosTuple[1])
+        con += 2
+
+    for hijo in hijos:
+        fitnessHijos.append(hijo)
+    return genListaFit(fitnessHijos, lista)
+
 
 def crossover(elemento1, elemento2, crossoverPoint):
     child1 = child2 = []
@@ -166,7 +183,7 @@ def crossover(elemento1, elemento2, crossoverPoint):
         else:
             child1.append(elemento2[i])
             child2.append(elemento1[i])
-    return [child1, child2]
+    return (child1, child2)
 
 n = nGen = 0
 numHijos = 4
@@ -180,6 +197,9 @@ while(nGen < 100):
     listaFitness = genListaFit(population, lista)
     listOnlyFitVal = listaFitness[1] #Aqui se evita enviar el arreglo de 1s y 0s
     idPadres = genPadres(listOnlyFitVal, numHijos, tamMaxPool)
+    idPadres = np.array(idPadres)
+    listaFitnessHijos = getHijos(idPadres[:,0], listaFitness, crossoverPoint)
+    print(f"Los fitness de los hijos son: {listaFitnessHijos[1]}")
     nGen += 1
 print(len(lista))
 print(len(population))
