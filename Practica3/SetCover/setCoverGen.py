@@ -56,7 +56,7 @@ def isValid(solucion, lista):
     else: 
         return (False, numeros)
     
-def turnValid(solucion, ban, numeros, lista, fitness):
+def turnValid(solucion, numeros, lista, fitness, ban = True):
     banAux = False
     if(ban == True):
         i = 0
@@ -157,33 +157,55 @@ def binTournament(pool1, pool2):
 
 def getHijos(idPadres, listaFitness, crossoverPoint):
     hijos = fitnessHijos =[]
-    hijosTuple = ()
-    con = 0
-    while(con < len(idPadres)):
-        hijosTuple = crossover( listaFitness[0][ idPadres[con] ], listaFitness[0][ idPadres[con+1] ], crossoverPoint)
-        hijos.append( hijosTuple[0] )
-        hijos.append( hijosTuple[1])
-        con += 2
-
-    for hijo in hijos:
-        fitnessHijos.append(hijo)
-    return genListaFit(fitnessHijos, lista)
+    hijosTuple = []
+    con = len(idPadres) - 1
+    while(con > 0):
+        hijosTuple.append(crossover( listaFitness[0][ idPadres[con] ], listaFitness[0][ idPadres[con-1] ], crossoverPoint))
+        con -= 2
+    for tupla in hijosTuple:
+        for elemento in tupla:
+            if(len(elemento)>63009):
+                elemento.pop()
+            print(f"Tamaño de elemento: {len(elemento)}")
+            hijos.append(elemento)
+    return genListaFit(hijos, lista)
 
 
 def crossover(elemento1, elemento2, crossoverPoint):
     child1 = child2 = []
+    i = 0
     tam = len(elemento1)
-    for i in range(tam):
+    print(f"EL TAMAÑO ES {tam}")
+    while(len(child1) < 63009 and len(child2) < 63009 ):
         if(i < crossoverPoint):
             child1.append(elemento2[i])
             child2.append(elemento1[i])
-        elif(i >= crossoverPoint and i < tam - crossoverPoint):
-            child1.append(elemento1[i])
-            child2.append(elemento2[i])
         else:
-            child1.append(elemento2[i])
-            child2.append(elemento1[i])
-    return (child1, child2)
+            if(i < tam - crossoverPoint):
+                child1.append(elemento1[i])
+                child2.append(elemento2[i])
+            else:
+                child1.append(elemento2[i])
+                child2.append(elemento1[i])
+        i += 1
+    # child1.pop()
+    # child2.pop()
+    print(f"Los tamaños de los hijos son 1:{len(child1)} y 2: {len(child2)}")
+    return [child1, child2]
+
+def mutacion(hijos):
+    umbral = .30
+    for hijo in hijos:
+        if(random.random() < umbral):
+            r = random.randint(10, 100)
+            for i in range(r):
+                ban = False
+                while(ban == False):
+                    pos = random.randint(0, 63009)
+                    if(hijo[pos] == 1):
+                        hijo[pos] == 0
+                        ban = True       
+    return hijos
 
 n = nGen = 0
 numHijos = 4
@@ -199,7 +221,9 @@ while(nGen < 100):
     idPadres = genPadres(listOnlyFitVal, numHijos, tamMaxPool)
     idPadres = np.array(idPadres)
     listaFitnessHijos = getHijos(idPadres[:,0], listaFitness, crossoverPoint)
+    print(f"El tamaño de el primer hijo es de {len(listaFitnessHijos[0][0])} y el tercero es: {len(listaFitnessHijos[0][2])}")
     print(f"Los fitness de los hijos son: {listaFitnessHijos[1]}")
+    listaFitnessHijos = genListaFit(mutacion(listaFitnessHijos[0]))
     nGen += 1
 print(len(lista))
 print(len(population))
