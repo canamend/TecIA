@@ -1,0 +1,59 @@
+Estimados estudiantes de la materia de TIA,
+
+A estas alturas ya deben ir en la parte final del desarrollo de la práctica,
+ quizá buscando los parámetros óptimos o corrigiendo los últimos 
+detalles de la implementación de su algoritmo.
+
+De modo que en este correo les especificaré cuales parámetros deben ir 
+fijos y cuales ustedes tienen libertad de buscar la mejor configuración. 
+Esto ya lo habíamos platicado en clase, pero aquí se los confirmo y además
+ de que hay un cambio en un parámetro.
+
+Parámetros fijos (para todos los equipos, para los tres problemas):
+Tamaño de la población: 1000 (este es el parámetro que cambió; antes 
+habíamos dicho que era de 100 individuos)
+Generaciones: 100
+Selección de padres: Torneo binario
+Elitismo (al menos la mejor solución, siempre debe sobrevivir en cada 
+generación)
+
+
+Parámetros que ustedes pueden optimizar:
+Política de reemplazo: generacional (toda la población de reemplaza con 
+hijos generados), estado estable (sólo una proporción de la población de 
+reemplaza; la proporción que ustdes elijan)
+Probabilidad de mutación
+Operaciones genéticas; ustdes tienen libertad de elegir que operaciones 
+genéticas utilizar para cada problema; en clase se explicaron cruzas y 
+mutaciones para los tres problemas, pueden usar cualquiera de esas u 
+otras que ustdes sugieran o hayan leido o encontrado.
+Sobre la calificación
+
+Para calificar esta práctica, cada uno de los tres problemas, el TSP, 
+el Schwefel  y el Set Cover, vale 3 puntos. De modo que si alguno de los 
+tres problemas no logran resolverlo, aún así pueden acceder a puntos de 
+esta práctica. Sólo el equipo que consiga el mejor resultado (mejor 
+soluciones
+promedio con menor desviación estandar) podrá sacar 10 de calificación 
+(siempre y cuando su reporte cumpla con los requerimientos que se han 
+mencionado ya).
+
+
+Sobre el reporte
+
+El reporte debe seguir el tono del reporte que les compartí: deben 
+especificar que configuraciones (política de reemplazo, % de mutación, 
+operaciones 
+genéticas) probaron, tablas y gráficas mostrando los resultados promedios 
+para cada una de configuraciones que experimentaron, etc. Equipos cuyo 
+reportes 
+no cumplan con estos mínimos habrá penalización.
+
+Fecha de entrega
+
+El reporte se deberá entregar a más tardar la madrugada del jueves, 
+0:00 hrs, para que ese día pueda llegar con ellos y corroborar que los 
+resultados que 
+anoten en la tabla coincidan con lo que reportaron en su documento. 
+De modo que el día jueves nos vemos para cerrar con está práctica y ver 
+a cual equipo le fue mejor.

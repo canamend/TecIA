@@ -22,7 +22,13 @@ def vecindario(rango, numero):
 def metropolis(x, xP, temp):
     k = 10
     e = xP - x
-    if(e > 0):
+    band = False
+    if(xP < 0 ):
+        print("es menor")
+        if(xP < x):
+            band = True
+
+    if(e > 0 or band == False):
         rand = random.uniform(0,1)
         if( math.exp((-1*k*e)/temp) > rand):
             return True #RETORNA RANGO ENTRE 0 Y 1, SE COMPARA CON RANDOM [ EN RANGO ENTRE 0 Y 1 ] (SI EL RANDOM ES MENOR AL VALOR DEL EXPONENCIAL, BRINCA YA QUE ENTRA DENTRO DEL RANGO QUE SE VA DECREMENTANDO)
@@ -72,6 +78,7 @@ for i in range(100):
 
     output = subprocess.run(["my_func4.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
     result = re.sub(r'[^0-9.]', '', output.stdout.decode('utf-8'))
+    print(f"\n RESULTADO:{result}")
     res = float(result)
 
     print(f"I actual: {i+1} resultado: {round(res,3)} mejor: {round(mejor,3)} combinación: {x1}, {x2} temp: {round(temp, 3)}")

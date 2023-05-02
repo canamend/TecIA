@@ -35,7 +35,7 @@ def metropolis(x, xP, temp):
 
 
 x1, x2 = generateRand(), generateRand()
-output = subprocess.run(["my_func4.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
+output = subprocess.run(["my_func5.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
 result = re.sub(r'[^0-9.]', '', output.stdout.decode('utf-8'))
 mejor = float(result)
 x1prim, x2prim = x1, x2
@@ -65,7 +65,7 @@ for i in range(100):
     else:
         x1, x2 = generateRand(), generateRand()
 
-    output = subprocess.run(["my_func4.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
+    output = subprocess.run(["my_func5.exe", f"{x1}", f"{x2}"], capture_output=True, shell=True)
     result = re.sub(r'[^0-9.]', '', output.stdout.decode('utf-8'))
     res = float(result)
 
